@@ -1,4 +1,5 @@
 name: Azure Pipelines
+
 variables:
   python.version: '3.9'
 stages:
@@ -9,6 +10,10 @@ stages:
       name: Hosted Ubuntu 1604
     steps:
     # Needed for Terraform VM deployment
+    - task: TerraformInstaller@0
+      displayName: 'Install Terraform'
+      inputs:
+        terraformVersion: 'latest'
     #- task: InstallSSHKey@0
     #  inputs:
     #    knownHostsEntry: 'KNOWN_HOSTS_STRING' #TODO
