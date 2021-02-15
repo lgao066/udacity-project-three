@@ -1,5 +1,6 @@
 name: Azure Pipelines
 
+
 variables:
   python.version: '3.9'
 stages:
@@ -14,6 +15,10 @@ stages:
       displayName: 'Install Terraform'
       inputs:
         terraformVersion: 'latest'
+    - task: TerraformCLI@0
+      inputs:
+        command: 'validate'
+        allowTelemetryCollection: true
     #- task: InstallSSHKey@0
     #  inputs:
     #    knownHostsEntry: 'KNOWN_HOSTS_STRING' #TODO
