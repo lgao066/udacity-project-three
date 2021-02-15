@@ -1,6 +1,6 @@
 name: Azure Pipelines
 variables:
-  python.version: '3.7.6'
+  python.version: '3.9'
 stages:
 - stage: Build
   jobs:
@@ -9,11 +9,11 @@ stages:
       name: Hosted Ubuntu 1604
     steps:
     # Needed for Terraform VM deployment
-    # - task: InstallSSHKey@0
-    #   inputs:
-    #     knownHostsEntry: 'KNOWN_HOSTS_STRING'
-    #     sshPublicKey: 'PUBLIC_KEY'
-    #     sshKeySecureFile: 'id_rsa'
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: 'KNOWN_HOSTS_STRING' #TODO
+        sshPublicKey: 'PUBLIC_KEY' #TODO
+        sshKeySecureFile: 'id_rsa' #TODO
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
@@ -24,7 +24,7 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
       displayName: 'Upload Package'
       artifact: drop-fakerestapi
-- stage:
+- stage: Deployment
   jobs:
   - deployment: FakeRestAPI
     pool:
