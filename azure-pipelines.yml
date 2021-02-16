@@ -3,6 +3,8 @@
 # Change python version to one thats appropriate for your application.
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
+name: Azure Pipelines
+
 trigger:
 - main
 
@@ -11,19 +13,19 @@ variables:
   azureServiceConnectionId: '478e149e-3171-47b6-93db-bd3c073fdc60'
 
   # Web app name
-  webAppName: ''
+  webAppName: 'udacity-project-3'
 
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  vmImageName: 'ubuntu-latest' #Ubuntu-16.04
 
   # Environment name
-  environmentName: ''
+  environmentName: 'Test'
 
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
 
-  # Python version: 3.7
-  pythonVersion: '3.7'
+  # Python version: 3.9
+  pythonVersion: '3.9'
 
 stages:
 - stage: Build
@@ -31,6 +33,7 @@ stages:
   jobs:
   - job: BuildJob
     pool:
+      name: Hosted Ubuntu 1604
       vmImage: $(vmImageName)
     steps:
     - task: UsePythonVersion@0
@@ -47,6 +50,34 @@ stages:
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 
+    # Needed for Terraform VM deployment
+    - task: TerraformInstaller@0
+      displayName: 'Install Terraform'
+      inputs:
+        terraformVersion: 'latest'
+
+    - task: TerraformCLI@0
+      inputs:
+        command: 'validate'
+        allowTelemetryCollection: true
+
+    #- task: InstallSSHKey@0
+    #  inputs:
+    #    knownHostsEntry: 'KNOWN_HOSTS_STRING' #TODO
+    #    sshPublicKey: 'PUBLIC_KEY' #TODO
+    #    sshKeySecureFile: 'id_rsa' #TODO
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive FakeRestAPI'
+      inputs:
+        rootFolderOrFile: 'automatedtesting/jmeter/fakerestapi'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip
+      displayName: 'Upload Package'
+      artifact: drop-fakerestapi
+
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
@@ -55,8 +86,7 @@ stages:
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         replaceExistingArchive: true
-
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       displayName: 'Upload package'
       artifact: drop
 
@@ -80,8 +110,32 @@ stages:
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App : '
+            displayName: 'Deploy Azure Web App'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
+              appType: webApp
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+
+  # - deployment: VMDeploy
+  #   displayName: NAME
+  #   environment:
+  #     name:  ENVIRONMENT NAME
+  #     resourceType: VirtualMachine
+  #     tags: TAG NAME
+  #   strategy:
+  #     runOnce:
+  #       deploy:
+  #         steps:
+  #         - task: Bash@3
+  #           inputs:
+  #             targetType: 'inline'
+  #             script: |
+  #               #! /bin/bash
+                
+  #               sudo apt-get upgrade -y
+  #               sudo apt-get install python3-pip -y
+  #               sudo apt-get install unzip -y
+  #               sudo apt-get install -y chromium-browser
+  #               pip3 install selenium
+  #               export PATH=$PATH:some/path
