@@ -129,7 +129,6 @@ dmypy.json
 .pyre/
 
 **/*.tfstate
-**/*.json
 **/*.exe
 
 # Local .terraform directories
