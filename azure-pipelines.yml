@@ -19,7 +19,7 @@ variables:
   vmImageName: 'ubuntu-latest' #Ubuntu-16.04
 
   # Environment name
-  environmentName: 'Test'
+  environmentName: 'test'
 
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
@@ -64,11 +64,13 @@ stages:
     - task: TerraformCLI@0
       inputs:
         command: 'init'
+        workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
 
     - task: TerraformCLI@0
       inputs:
         command: 'apply'
+        workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
 
     #- task: InstallSSHKey@0
