@@ -36,19 +36,19 @@ stages:
       name: Hosted Ubuntu 1604
       vmImage: $(vmImageName)
     steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '$(pythonVersion)'
-      displayName: 'Use Python $(pythonVersion)'
+    #- task: UsePythonVersion@0
+    #  inputs:
+    #    versionSpec: '$(pythonVersion)'
+    #  displayName: 'Use Python $(pythonVersion)'
 
-    - script: |
-        python -m venv antenv
-        source antenv/bin/activate
-        python -m pip install --upgrade pip
-        pip install setup
-        pip install -r requirements.txt
-      workingDirectory: $(projectRoot)
-      displayName: "Install requirements"
+    #- script: |
+    #    python -m venv antenv
+    #    source antenv/bin/activate
+    #    python -m pip install --upgrade pip
+    #    pip install setup
+    #    pip install -r requirements.txt
+    #  workingDirectory: $(projectRoot)
+    #  displayName: "Install requirements"
 
     # Needed for Terraform VM deployment
     - task: TerraformInstaller@0
