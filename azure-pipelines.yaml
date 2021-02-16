@@ -3,7 +3,7 @@ name: Azure Pipelines
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
-  azureServiceConnectionId: 'dee031da-d9e7-4230-9c75-8e2891c4c7b2'
+  azureServiceConnectionId: 'lgao066'
   
   # Web app name
   webAppName: 'udacity-project-3'
