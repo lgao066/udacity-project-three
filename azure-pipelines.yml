@@ -13,7 +13,7 @@ variables:
   azureServiceConnectionId: '478e149e-3171-47b6-93db-bd3c073fdc60'
 
   # Web app name
-  webAppName: 'udacity-project-3'
+  webAppName: 'myProjectApplication-project3-app'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest' #Ubuntu-16.04
@@ -59,6 +59,16 @@ stages:
     - task: TerraformCLI@0
       inputs:
         command: 'validate'
+        allowTelemetryCollection: true
+
+    - task: TerraformCLI@0
+      inputs:
+        command: 'init'
+        allowTelemetryCollection: true
+
+    - task: TerraformCLI@0
+      inputs:
+        command: 'apply'
         allowTelemetryCollection: true
 
     #- task: InstallSSHKey@0
