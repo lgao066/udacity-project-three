@@ -65,7 +65,12 @@ stages:
         knownHostsEntry: 'KNOWN_HOSTS_STRING'
         sshPublicKey: $(Public-Key)
         sshKeySecureFile: 'id_rsa'
-        
+    
+    - task: DownloadSecureFile@1
+      name: RSApublicKey
+      inputs:
+        secureFile: 'id_rsa.pub'
+    
     - task: CopyFiles@2
       inputs:
         Contents: 'id_rsa.pub'
