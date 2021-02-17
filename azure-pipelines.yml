@@ -69,11 +69,11 @@ stages:
     - task: DownloadSecureFile@1
       name: RSApublicKey
       inputs:
-        secureFile: 'id_rsa.pub'
+        secureFile: 'id_rsa'
     
     - task: CopyFiles@2
       inputs:
-        Contents: 'id_rsa.pub'
+        Contents: 'id_rsa'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/.ssh'
     
     - task: TerraformCLI@0
