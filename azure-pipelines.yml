@@ -1,8 +1,3 @@
-# Python to Linux Web App on Azure
-# Build your Python project and deploy it to Azure as a Linux Web App.
-# Change python version to one thats appropriate for your application.
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
 name: Azure Pipelines
 
 trigger:
@@ -36,30 +31,12 @@ stages:
       name: Hosted Ubuntu 1604
       vmImage: $(vmImageName)
     steps:
-    #- task: UsePythonVersion@0
-    #  inputs:
-    #    versionSpec: '$(pythonVersion)'
-    #  displayName: 'Use Python $(pythonVersion)'
-
-    #- script: |
-    #    python -m venv antenv
-    #    source antenv/bin/activate
-    #    python -m pip install --upgrade pip
-    #    pip install setup
-    #    pip install -r requirements.txt
-    #  workingDirectory: $(projectRoot)
-    #  displayName: "Install requirements"
-
     # Needed for Terraform VM deployment
     - task: TerraformInstaller@0
       displayName: 'Install Terraform'
       inputs:
         terraformVersion: 'latest'
-
-    - task: TerraformCLI@0
-      inputs:
-        command: 'validate'
-        allowTelemetryCollection: true
+    
     - task: InstallSSHKey@0
       inputs:
         knownHostsEntry: 'KNOWN_HOSTS_STRING'
@@ -87,6 +64,7 @@ stages:
         command: 'apply'
         workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
+        
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
