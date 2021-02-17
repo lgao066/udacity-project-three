@@ -60,7 +60,11 @@ stages:
       inputs:
         command: 'validate'
         allowTelemetryCollection: true
-
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: 'KNOWN_HOSTS_STRING'
+        sshPublicKey: $(Public-Key)
+        sshKeySecureFile: 'id_rsa'
     - task: TerraformCLI@0
       inputs:
         command: 'init'
@@ -72,13 +76,6 @@ stages:
         command: 'apply'
         workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
-
-    - task: InstallSSHKey@0
-      inputs:
-        knownHostsEntry: 'KNOWN_HOSTS_STRING'
-        sshPublicKey: $(Public-Key)
-        sshKeySecureFile: 'id_rsa'
-
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
