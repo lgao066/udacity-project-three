@@ -73,11 +73,11 @@ stages:
         workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
 
-    #- task: InstallSSHKey@0
-    #  inputs:
-    #    knownHostsEntry: 'KNOWN_HOSTS_STRING' #TODO
-    #    sshPublicKey: 'PUBLIC_KEY' #TODO
-    #    sshKeySecureFile: 'id_rsa' #TODO
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: 'KNOWN_HOSTS_STRING'
+        sshPublicKey: $(Public-Key)
+        sshKeySecureFile: 'id_rsa'
 
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
