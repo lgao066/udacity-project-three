@@ -68,10 +68,37 @@ stages:
         workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
 
+###############
+# Run Postman #
+###############
+    - task: CmdLine@2
+      inputs:
+        script: |
+          sudo npm install -g newman
+          sudo npm install -g newman-reporter-junitfull
+      displayName: "Install newman"
+   
+    - task: CmdLine@2
+      inputs:
+        script: 'newman run $(Build.SourcesDirectory)/automatedtesting/postman/data_validation_test.postman_collection.json -e "$(Build.SourcesDirectory)/automatedtesting/postman/userva.postman_environment.json" -r cli,junitfull --reporter-junitfull-export JUnitReportDataVal.xml'
+      displayName: "Run Postman validation test"
+      continueOnError: True
+    - task: CmdLine@2
+      inputs:
+        script: 'newman run $(Build.SourcesDirectory)/automatedtesting/postman/regression_test.postman_collection.json -e "$(Build.SourcesDirectory)/automatedtesting/postman/userva.postman_environment.json" -r cli,junitfull --reporter-junitfull-export JUnitReportRegr.xml'   
+      displayName: "Run Postman regression test"
+      continueOnError: True    
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'JUnitReport*.xml'
+      continueOnError: True
+
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
-        rootFolderOrFile: 'automatedtesting/jmeter/fakerestapi'
+        rootFolderOrFile: '$(Build.SourcesDirectory)/automatedtesting/jmeter/fakerestapi'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip'
