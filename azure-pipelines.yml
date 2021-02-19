@@ -133,12 +133,6 @@ stages:
           command: 'init'
           workingDirectory: 'terraform/environments/$(environmentName)'
           allowTelemetryCollection: true
-
-      - task: TerraformCLI@0
-        inputs:
-          command: 'destroy'
-          workingDirectory: 'terraform/environments/$(environmentName)'
-          allowTelemetryCollection: true
       
       - task: AzureCLI@2
         inputs:
