@@ -1,10 +1,12 @@
+#!/usr/bin/env python3
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 import logging
 from pyvirtualdisplay import Display
 
 options = ChromeOptions()
-    #options.add_argument("--no-sandbox")
+#options.add_argument("--no-sandbox")
 options.add_argument("--headless") 
 driver = webdriver.Chrome(options=options)
 display = Display(visible=0, size=(800, 800))  
