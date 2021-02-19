@@ -133,11 +133,11 @@ stages:
           command: 'init'
           workingDirectory: 'terraform/environments/$(environmentName)'
           allowTelemetryCollection: true
-      
+
       - task: AzureCLI@2
         inputs:
           azureSubscription: 'Azure subscription pay as you go (99f393b7-8581-443e-9c10-10793274d633)'
-          scriptType: 'batch'
+          scriptType: 'bash'
           scriptLocation: 'inlineScript'
           inlineScript: |
             cd $(Build.SourcesDirectory)/terraform              ls -all
