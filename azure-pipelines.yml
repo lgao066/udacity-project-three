@@ -216,7 +216,10 @@ stages:
 
 - stage: Destroy
   displayName: 'Destroy Infrastructure created'
-  dependsOn: DeployWebApp, DeployFakeRestAPI, VirtualMachineDeploy
+  dependsOn: 
+   - DeployWebApp
+   - DeployFakeRestAPI
+   - VirtualMachineDeploy
   condition: succeeded()
   jobs:
   - job: DestroyJob
