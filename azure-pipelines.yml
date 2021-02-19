@@ -190,10 +190,7 @@ stages:
 - stage: VirtualMachineDeploy
   jobs:
   - deployment: VMDeploy
-    displayName: 'Deployment VM'
-    environment: 
-      name: test
-      resourceType: VirtualMachine
+    environment: $(environmentName)
     strategy:
       runOnce:
         deploy:
