@@ -54,7 +54,7 @@ stages:
       inputs:
         SourceFolder: $(Agent.TempDirectory)
         Contents: 'id_rsa.pub'
-        TargetFolder: '$(projectRoot)/.ssh'
+        TargetFolder: '$(Agent.HomeDirectory)/.ssh'
     
     - task: TerraformCLI@0
       inputs:
