@@ -8,7 +8,7 @@ variables:
   azureServiceConnectionId: '478e149e-3171-47b6-93db-bd3c073fdc60'
 
   # Web app name
-  webAppName: 'myProjectApplication-project3-app'
+  webAppName: 'myProjectApplication-AppService-app'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest' #Ubuntu-16.04
@@ -118,6 +118,11 @@ stages:
               appType: webApp
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
 
+          - task: TerraformCLI@0
+            inputs:
+              command: 'validate'
+              commandOptions: 'destroy'
+              allowTelemetryCollection: true
   # - deployment: VMDeploy
   #   displayName: NAME
   #   environment:
