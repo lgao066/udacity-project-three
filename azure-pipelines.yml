@@ -131,7 +131,6 @@ stages:
       runOnce:
         deploy:
           steps:
-
           - task: UsePythonVersion@0
             inputs:
               versionSpec: '$(pythonVersion)'
@@ -156,14 +155,6 @@ stages:
         deploy:
           steps:
            - checkout: self
-           #- task: AzureWebApp@1
-           #  displayName: 'Deploy Azure Web App'
-           #  inputs:
-           #    azureSubscription: $(azureServiceConnectionId)
-           #    appType: 'webApp'
-           #    appName: $(webAppName)
-           #    package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
-           #    deploymentMethod: 'auto'
 
            - task: CmdLine@2
              inputs:
@@ -196,7 +187,6 @@ stages:
         deploy:
           steps:
           - checkout: self
-          
           - task: UsePythonVersion@0
             inputs:
               versionSpec: '$(pythonVersion)'
@@ -210,7 +200,7 @@ stages:
                 ls -a 
                 sudo apt-get install python3-pip -y
                 sudo apt-get install unzip -y
-                sudo pip3 install --upgrade pip
+                
                 sudo apt-get install -y chromium-browser
                 sudo apt-get install chromium-chromedriver
                 sudo pip3 install selenium
