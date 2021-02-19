@@ -128,6 +128,11 @@ stages:
       name: Hosted Ubuntu 1604
       vmImage: $(vmImageName)
     steps:
+      - task: InstallSSHKey@0
+        inputs:
+          knownHostsEntry: 'KNOWN_HOSTS_STRING'
+          sshPublicKey: $(Public-Key)
+          sshKeySecureFile: 'id_rsa'
       - task: TerraformCLI@0
         inputs:
           command: 'init'
