@@ -44,13 +44,16 @@ stages:
         sshKeySecureFile: 'id_rsa.pub'
     
     - task: DownloadSecureFile@1
-      name: RSApublicKey
+      name: RSApublicKey 
+      # reference the secure file's path on the agent, 
+      # like $(mySecureFile.secureFilePath)
       inputs:
         secureFile: 'id_rsa.pub'
     
     - task: CopyFiles@2
       inputs:
-        Contents: 'id_rsa'
+        SourceFolder: $(RSApublicKey.secureFilePath)
+        Contents: '*'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/.ssh'
     
     - task: TerraformCLI@0
