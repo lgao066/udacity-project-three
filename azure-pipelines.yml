@@ -141,7 +141,8 @@ stages:
           scriptLocation: 'inlineScript'
           inlineScript: |
             cd $(Build.SourcesDirectory)/terraform              ls -all
-            terraform init 
+            terraform init
+            terraform plan -destroy
             terraform destroy
 
 
