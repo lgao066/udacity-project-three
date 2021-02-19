@@ -189,7 +189,7 @@ stages:
 
 - stage: Destroy
   displayName: 'Destroy Infrastructure created'
-  dependsOn: Deploy
+  dependsOn: DeployWebApp
   condition: succeeded()
   jobs:
   - job: DestroyJob
