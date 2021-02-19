@@ -159,9 +159,9 @@ stages:
            #- task: AzureWebApp@1
            #  displayName: 'Deploy Azure Web App'
            #  inputs:
-           #    azureSubscription: 'BohdanSubscriptions(5717f5b8-d0ac-41b0-a6b7-6c3a51c25847)'
+           #    azureSubscription: $(azureServiceConnectionId)
            #    appType: 'webApp'
-           #    appName: 'udacity-app-AppService'
+           #    appName: $(webAppName)
            #    package: '$(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip'
            #    deploymentMethod: 'auto'
 
@@ -187,9 +187,36 @@ stages:
               targetPath:  $(Build.SourcesDirectory)/automatedtesting/jmeter/report
               artifact: jmeter
 
+- stage: VirtualMachineDeploy
+  jobs:
+  - deployment: VMDeploy
+    displayName: 'Deployment VM'
+    environment: 
+      name: test
+      resourceType: VirtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                #! /bin/bash
+                ls -a 
+                sudo apt-get install python3-pip -y
+                sudo apt-get install unzip -y
+                sudo pip3 install --upgrade pip
+                sudo apt-get install -y chromium-browser
+                sudo apt-get install chromium-chromedriver
+                sudo pip3 install selenium
+                export PATH=$PATH:/usr/bin/chromedriver
+                python3 $(Build.SourcesDirectory)/automatedtesting/selenium/login.py
+
 - stage: Destroy
   displayName: 'Destroy Infrastructure created'
-  dependsOn: DeployWebApp
+  dependsOn: DeployWebApp, DeployFakeRestAPI, VirtualMachineDeploy
   condition: succeeded()
   jobs:
   - job: DestroyJob
