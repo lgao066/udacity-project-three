@@ -52,7 +52,7 @@ stages:
     
     - task: CopyFiles@2
       inputs:
-        SourceFolder: $(RSApublicKey.secureFilePath)
+        SourceFolder: $(Agent.TempDirectory)
         Contents: '*'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/.ssh'
     
