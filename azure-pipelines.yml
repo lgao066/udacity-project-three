@@ -41,20 +41,20 @@ stages:
       inputs:
         knownHostsEntry: 'KNOWN_HOSTS_STRING'
         sshPublicKey: $(Public-Key)
-        sshKeySecureFile: 'id_rsa.pub'
+        sshKeySecureFile: 'id_rsa'
     
     - task: DownloadSecureFile@1
       name: RSApublicKey 
       # reference the secure file's path on the agent, 
       # like $(mySecureFile.secureFilePath)
       inputs:
-        secureFile: 'id_rsa.pub'
+        secureFile: 'id_rsa'
     
     - task: CopyFiles@2
       inputs:
         SourceFolder: $(Agent.TempDirectory)
-        Contents: '*'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/.ssh'
+        Contents: 'id_rsa.pub'
+        TargetFolder: '$(projectRoot)/.ssh'
     
     - task: TerraformCLI@0
       inputs:
