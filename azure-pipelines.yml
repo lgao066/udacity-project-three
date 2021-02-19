@@ -117,12 +117,13 @@ stages:
               appName: $(webAppName)
               appType: webApp
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-
+    
           - task: TerraformCLI@0
             inputs:
-              command: 'validate'
-              commandOptions: 'destroy'
+              command: 'destroy'
+              workingDirectory: 'terraform/environments/$(environmentName)'
               allowTelemetryCollection: true
+              
   # - deployment: VMDeploy
   #   displayName: NAME
   #   environment:
