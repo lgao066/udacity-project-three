@@ -118,7 +118,7 @@ stages:
       displayName: 'Upload package'
       artifact: drop
 
-- stage: Deploy Web App
+- stage: DeployWebApp
   displayName: 'Deploy Web App'
   dependsOn: Build
   condition: succeeded()
@@ -145,7 +145,7 @@ stages:
               appType: webApp
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
 
-- stage: Deploy FakeRestAPI
+- stage: DeployFakeRestAPI
   jobs:
   - deployment: FakeRestAPI
     pool:
