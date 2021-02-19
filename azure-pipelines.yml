@@ -196,6 +196,12 @@ stages:
         deploy:
           steps:
           - checkout: self
+          
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '$(pythonVersion)'
+            displayName: 'Use Python version'
+            
           - task: Bash@3
             inputs:
               targetType: 'inline'
