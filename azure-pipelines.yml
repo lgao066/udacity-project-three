@@ -31,31 +31,31 @@ stages:
       name: Hosted Ubuntu 1604
       vmImage: $(vmImageName)
     steps:
-    # Needed for Terraform VM deployment
+    # Terraform VM deployment
     - task: TerraformInstaller@0
       displayName: 'Install Terraform'
       inputs:
         terraformVersion: 'latest'
-    
+
     - task: InstallSSHKey@0
       inputs:
         knownHostsEntry: 'KNOWN_HOSTS_STRING'
         sshPublicKey: $(Public-Key)
         sshKeySecureFile: 'id_rsa'
-    
+
     - task: DownloadSecureFile@1
       name: RSApublicKey 
       # reference the secure file's path on the agent, 
       # like $(mySecureFile.secureFilePath)
       inputs:
         secureFile: 'id_rsa'
-    
+
     - task: CopyFiles@2
       inputs:
         SourceFolder: $(Agent.TempDirectory)
         Contents: 'id_rsa.pub'
         TargetFolder: '/home/vsts/.ssh'
-    
+
     - task: TerraformCLI@0
       inputs:
         command: 'init'
@@ -67,7 +67,7 @@ stages:
         command: 'apply'
         workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
-        
+
     - task: ArchiveFiles@2
       displayName: 'Archive FakeRestAPI'
       inputs:
@@ -117,13 +117,24 @@ stages:
               appName: $(webAppName)
               appType: webApp
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-    
-          - task: TerraformCLI@0
-            inputs:
-              command: 'destroy'
-              workingDirectory: 'terraform/environments/$(environmentName)'
-              allowTelemetryCollection: true
-              
+
+- stage: Destroy
+  displayName: 'Destroy Infrastructure created'
+  dependsOn: Deploy
+  condition: succeeded()
+  jobs:
+  - job: DestroyJob
+    pool:
+      name: Hosted Ubuntu 1604
+      vmImage: $(vmImageName)
+    steps:
+      - task: TerraformCLI@0
+        inputs:
+          command: 'destroy'
+          workingDirectory: 'terraform/environments/$(environmentName)'
+          allowTelemetryCollection: true
+
+
   # - deployment: VMDeploy
   #   displayName: NAME
   #   environment:
