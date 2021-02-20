@@ -189,7 +189,6 @@ stages:
   displayName: 'Destroy Infrastructure created'
   dependsOn: 
    - DeployWebApp
-   - DeployFakeRestAPI
    - VirtualMachineDeploy
   condition: failed()
   jobs:
