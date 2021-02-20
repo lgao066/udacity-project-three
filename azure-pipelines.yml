@@ -156,6 +156,10 @@ stages:
           steps:
            - checkout: self
 
+###############
+# Run JMeter  #
+###############
+
            - task: CmdLine@2
              inputs:
               script: |
@@ -214,6 +218,10 @@ stages:
               script: >
                 pip install webdriver-manager
               workingDirectory: D:\a\1\s\automatedtesting\selenium\bin
+
+################
+# Run Selenium #
+################
           - task: PythonScript@0
             displayName: Run script
             inputs:
@@ -225,7 +233,7 @@ stages:
    - DeployWebApp
    - DeployFakeRestAPI
    - VirtualMachineDeploy
-  condition: succeeded()
+  condition: failed()
   jobs:
   - job: DestroyJob
     pool:
