@@ -182,7 +182,7 @@ stages:
   jobs:
   - deployment: VMDeploy
     pool:
-      vmImage: $(vmImageName)
+      vmImage: vs2017-win2016
     environment: $(environmentName)
     strategy:
       runOnce:
