@@ -106,18 +106,6 @@ stages:
       displayName: 'Upload Package'
       artifact: drop-fakerestapi
 
-    - task: ArchiveFiles@2
-      displayName: 'Archive files'
-      inputs:
-        rootFolderOrFile: '$(projectRoot)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
-    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      displayName: 'Upload package'
-      artifact: drop
-
 - stage: DeployWebApp
   displayName: 'Deploy Web App'
   dependsOn: Build
@@ -142,7 +130,7 @@ stages:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
               appType: webApp
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+              package: $(Pipeline.Workspace)/drop/$(Build.BuildId)-fakerestapi.zip
 
 - stage: DeployFakeRestAPI
   jobs:
