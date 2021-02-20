@@ -119,11 +119,6 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: UsePythonVersion@0
-            inputs:
-              versionSpec: '$(pythonVersion)'
-            displayName: 'Use Python version'
-
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App'
             inputs:
@@ -131,23 +126,9 @@ stages:
               appName: $(webAppName)
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-
-- stage: DeployFakeRestAPI
-  jobs:
-  - deployment: FakeRestAPI
-    pool:
-      vmImage: $(vmImageName)
-    environment: $(environmentName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-           - checkout: self
-
 ###############
 # Run JMeter  #
 ###############
-
            - task: CmdLine@2
              inputs:
               script: |
@@ -180,12 +161,7 @@ stages:
       runOnce:
         deploy:
           steps:
-          - checkout: self
-          - task: UsePythonVersion@0
-            inputs:
-              versionSpec: '$(pythonVersion)'
-            displayName: 'Use Python version'
-            
+          - checkout: self            
           - task: CopyFiles@2
             displayName: Copy Files
             inputs:
