@@ -68,9 +68,6 @@ stages:
         workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
 
-###############
-# Run Postman #
-###############
     - task: CmdLine@2
       inputs:
         script: |
@@ -126,30 +123,30 @@ stages:
               appName: $(webAppName)
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-###############
-# Run JMeter  #
-###############
-           - task: CmdLine@2
-             inputs:
-              script: |
-                cd $(Build.SourcesDirectory)/automatedtesting/jmeter/
-                VERSION='5.3'
-                URL=https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${VERSION}.tgz
-                # Download Jmeter.
-                curl $URL > apache-jmeter-${VERSION}.tgz
-                gunzip apache-jmeter-${VERSION}.tgz
-                tar -xvf apache-jmeter-${VERSION}.tar
-                mkdir -p $(Build.SourcesDirectory)/automatedtesting/jmeter/report
-                ./apache-jmeter-${VERSION}/bin/jmeter -n -t Starter.jmx -l report/results-starter.jtl -e -o $(Build.SourcesDirectory)/automatedtesting/jmeter/report/starter
-                echo endurance test
-                ./apache-jmeter-${VERSION}/bin/jmeter -n -t EnduranceTest.jmx -l report/endurance-test-result.jtl -e -o $(Build.SourcesDirectory)/automatedtesting/jmeter/report/endurance
-                echo stress test
-                ./apache-jmeter-${VERSION}/bin/jmeter -n -t StressTest.jmx -l report/stress-test-result.jtl -e -o $(Build.SourcesDirectory)/automatedtesting/jmeter/report/stress
-           - task: PublishPipelineArtifact@1
-             displayName: Publish JMeter Report
-             inputs:
-              targetPath:  $(Build.SourcesDirectory)/automatedtesting/jmeter/report
-              artifact: jmeter
+
+          - task: CmdLine@2
+            displayName: 'Run JMeter tests'
+            inputs:
+               script: |
+                 cd $(Build.SourcesDirectory)/automatedtesting/jmeter/
+                 VERSION='5.3'
+                 URL=https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${VERSION}.tgz
+                 # Download Jmeter.
+                 curl $URL > apache-jmeter-${VERSION}.tgz
+                 gunzip apache-jmeter-${VERSION}.tgz
+                 tar -xvf apache-jmeter-${VERSION}.tar
+                 mkdir -p $(Build.SourcesDirectory)/automatedtesting/jmeter/report
+                 ./apache-jmeter-${VERSION}/bin/jmeter -n -t Starter.jmx -l report/results-starter.jtl -e -o $(Build.SourcesDirectory)/automatedtesting/jmeter/report/starter
+                 echo endurance test
+                 ./apache-jmeter-${VERSION}/bin/jmeter -n -t EnduranceTest.jmx -l report/endurance-test-result.jtl -e -o $(Build.SourcesDirectory)/automatedtesting/jmeter/report/endurance
+                 echo stress test
+                 ./apache-jmeter-${VERSION}/bin/jmeter -n -t StressTest.jmx -l report/stress-test-result.jtl -e -o $(Build.SourcesDirectory)/automatedtesting/jmeter/report/stress
+           
+          - task: PublishPipelineArtifact@1
+            displayName: Publish JMeter Report
+            inputs:
+               targetPath:  $(Build.SourcesDirectory)/automatedtesting/jmeter/report
+               artifact: jmeter
 
 - stage: VirtualMachineDeploy
   jobs:
@@ -183,11 +180,8 @@ stages:
                 pip install webdriver-manager
               workingDirectory: D:\a\1\s\automatedtesting\selenium\bin
 
-################
-# Run Selenium #
-################
           - task: PythonScript@0
-            displayName: Run script
+            displayName: Run Selenium script
             inputs:
               scriptPath: D:\a\1\s\automatedtesting\selenium\bin\login.py
 
