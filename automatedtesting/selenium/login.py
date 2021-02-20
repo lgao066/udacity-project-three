@@ -1,17 +1,17 @@
-#!/usr/bin/env python3
-
+import selenium
+#import pyvirtualdisplay
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 import logging
-from pyvirtualdisplay import Display
+#from pyvirtualdisplay import Display
 
 options = ChromeOptions()
 #options.add_argument("--no-sandbox")
-options.add_argument("--headless") 
-driver = webdriver.Chrome(options=options)
-display = Display(visible=0, size=(800, 800))  
-display.start()
-driver = webdriver.Chrome()
+#options.add_argument("--headless") 
+#driver = webdriver.Chrome(options=options)
+#display = Display(visible=0, size=(800, 800))  
+#display.start()
+#driver = webdriver.Chrome()
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
