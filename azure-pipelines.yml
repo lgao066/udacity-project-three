@@ -194,24 +194,30 @@ stages:
               versionSpec: '$(pythonVersion)'
             displayName: 'Use Python version'
             
-          - task: Bash@3
+          - task: CopyFiles@2
+            displayName: Copy Files
             inputs:
-              targetType: 'inline'
-              script: |
-                #! /bin/bash
-                ls -a 
-                python3 -m venv ~/.venv
-                source ~/.venv/bin/activate
-                sudo apt-get install python3-pip -y
-                sudo apt-get install unzip -y
-                sudo apt-get install -y chromium-browser
-                sudo apt-get install chromium-chromedriver
-                sudo pip3 install selenium
-                pip freeze
-                which python
-                which pip
-                export PATH=$PATH:/usr/bin/chromedriver
-                python3 $(Build.SourcesDirectory)/automatedtesting/selenium/login.py
+              SourceFolder: D:\a\1\a\LoginTestSuite\selenium
+              TargetFolder: D:\a\1\a\LoginTestSuite\selenium\bin
+              CleanTargetFolder: true
+              OverWrite: true
+          
+          - task: CmdLine@2
+            displayName: Install Selenium-webdriver
+            inputs:
+              script: >
+                pip install selenium
+              workingDirectory: D:\a\1\a\LoginTestSuite\selenium\bin
+          - task: CmdLine@2
+            displayName: Install webdriver_manager
+            inputs:
+              script: >
+                pip install webdriver-manager
+              workingDirectory: D:\a\1\a\LoginTestSuite\selenium\bin
+          - task: PythonScript@0
+            displayName: Run script
+            inputs:
+              scriptPath: D:\a\1\a\LoginTestSuite\selenium\bin\login.py
 
 - stage: Destroy
   displayName: 'Destroy Infrastructure created'
