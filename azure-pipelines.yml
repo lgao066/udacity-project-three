@@ -130,7 +130,7 @@ stages:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
               appType: webApp
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId)-fakerestapi.zip
+              package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
 
 - stage: DeployFakeRestAPI
   jobs:
