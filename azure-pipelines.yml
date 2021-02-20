@@ -207,6 +207,9 @@ stages:
                 sudo apt-get install -y chromium-browser
                 sudo apt-get install chromium-chromedriver
                 sudo pip3 install selenium
+                pip freeze
+                which python
+                which pip
                 export PATH=$PATH:/usr/bin/chromedriver
                 python3 $(Build.SourcesDirectory)/automatedtesting/selenium/login.py
 
