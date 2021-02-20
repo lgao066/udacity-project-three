@@ -197,8 +197,8 @@ stages:
           - task: CopyFiles@2
             displayName: Copy Files
             inputs:
-              SourceFolder: D:\a\1\a\automatedtesting\selenium
-              TargetFolder: D:\a\1\a\automatedtesting\selenium\bin
+              SourceFolder: D:\a\1\s\automatedtesting\selenium
+              TargetFolder: D:\a\1\s\automatedtesting\selenium\bin
               CleanTargetFolder: true
               OverWrite: true
           
@@ -207,17 +207,17 @@ stages:
             inputs:
               script: >
                 pip install selenium
-              workingDirectory: D:\a\1\a\automatedtesting\selenium\bin
+              workingDirectory: D:\a\1\s\automatedtesting\selenium\bin
           - task: CmdLine@2
             displayName: Install webdriver_manager
             inputs:
               script: >
                 pip install webdriver-manager
-              workingDirectory: D:\a\1\a\automatedtesting\selenium\bin
+              workingDirectory: D:\a\1\s\automatedtesting\selenium\bin
           - task: PythonScript@0
             displayName: Run script
             inputs:
-              scriptPath: D:\a\1\a\automatedtesting\selenium\bin\login.py
+              scriptPath: D:\a\1\s\automatedtesting\selenium\bin\login.py
 
 - stage: Destroy
   displayName: 'Destroy Infrastructure created'
