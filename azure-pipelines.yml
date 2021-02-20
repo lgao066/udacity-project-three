@@ -181,6 +181,8 @@ stages:
 - stage: VirtualMachineDeploy
   jobs:
   - deployment: VMDeploy
+    pool:
+      vmImage: $(vmImageName)
     environment: $(environmentName)
     strategy:
       runOnce:
@@ -198,9 +200,10 @@ stages:
               script: |
                 #! /bin/bash
                 ls -a 
+                python3 -m venv ~/.venv
+                source ~/.venv/bin/activate
                 sudo apt-get install python3-pip -y
                 sudo apt-get install unzip -y
-                
                 sudo apt-get install -y chromium-browser
                 sudo apt-get install chromium-chromedriver
                 sudo pip3 install selenium
@@ -247,26 +250,3 @@ stages:
           command: 'destroy'
           workingDirectory: 'terraform/environments/$(environmentName)'
           allowTelemetryCollection: true
-
-  # - deployment: VMDeploy
-  #   displayName: NAME
-  #   environment:
-  #     name:  ENVIRONMENT NAME
-  #     resourceType: VirtualMachine
-  #     tags: TAG NAME
-  #   strategy:
-  #     runOnce:
-  #       deploy:
-  #         steps:
-  #         - task: Bash@3
-  #           inputs:
-  #             targetType: 'inline'
-  #             script: |
-  #               #! /bin/bash
-                
-  #               sudo apt-get upgrade -y
-  #               sudo apt-get install python3-pip -y
-  #               sudo apt-get install unzip -y
-  #               sudo apt-get install -y chromium-browser
-  #               pip3 install selenium
-  #               export PATH=$PATH:some/path
