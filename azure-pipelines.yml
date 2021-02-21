@@ -36,45 +36,38 @@ stages:
       displayName: 'Install Terraform'
       inputs:
         terraformVersion: 'latest'
-
     - task: InstallSSHKey@0
       inputs:
         knownHostsEntry: 'KNOWN_HOSTS_STRING'
         sshPublicKey: $(Public-Key)
         sshKeySecureFile: 'id_rsa'
-
     - task: DownloadSecureFile@1
       name: RSApublicKey 
       # reference the secure file's path on the agent, 
       # like $(mySecureFile.secureFilePath)
       inputs:
         secureFile: 'id_rsa'
-
     - task: CopyFiles@2
       inputs:
         SourceFolder: $(Agent.TempDirectory)
         Contents: 'id_rsa.pub'
         TargetFolder: '/home/vsts/.ssh'
-
     - task: TerraformCLI@0
       inputs:
         command: 'init'
         workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
-
     - task: TerraformCLI@0
       inputs:
         command: 'apply'
         workingDirectory: 'terraform/environments/$(environmentName)'
         allowTelemetryCollection: true
-
     - task: CmdLine@2
       inputs:
         script: |
           sudo npm install -g newman
           sudo npm install -g newman-reporter-junitfull
       displayName: "Install newman"
-   
     - task: CmdLine@2
       inputs:
         script: 'newman run $(Build.SourcesDirectory)/automatedtesting/postman/data_validation_test.postman_collection.json -e "$(Build.SourcesDirectory)/automatedtesting/postman/userva.postman_environment.json" -r cli,junitfull --reporter-junitfull-export JUnitReportDataVal.xml'
@@ -85,14 +78,13 @@ stages:
         script: 'newman run $(Build.SourcesDirectory)/automatedtesting/postman/regression_test.postman_collection.json -e "$(Build.SourcesDirectory)/automatedtesting/postman/userva.postman_environment.json" -r cli,junitfull --reporter-junitfull-export JUnitReportRegr.xml'   
       displayName: "Run Postman regression test"
       continueOnError: True    
-
     - task: PublishTestResults@2
       inputs:
         testResultsFormat: 'JUnit'
         testResultsFiles: 'JUnitReport*.xml'
       continueOnError: True
-
     - task: ArchiveFiles@2
+    
       displayName: 'Archive FakeRestAPI'
       inputs:
         rootFolderOrFile: '$(Build.SourcesDirectory)/automatedtesting/jmeter/fakerestapi'
