@@ -84,7 +84,7 @@ stages:
         testResultsFiles: 'JUnitReport*.xml'
       continueOnError: True
     - task: ArchiveFiles@2
-    
+
       displayName: 'Archive FakeRestAPI'
       inputs:
         rootFolderOrFile: '$(Build.SourcesDirectory)/automatedtesting/jmeter/fakerestapi'
@@ -109,14 +109,18 @@ stages:
         deploy:
           steps:
           - checkout: self
-          - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App'
+          - download: current
+            displayName: 'Download FakerRestApi'
+            artifact: drop-fakerestapi
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy FakerRestApi to AppService'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
-              appName: $(webAppName)
-              appType: webApp
-              package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip
-              deploymentMethod: 'auto'
+              WebAppName: $(webAppName)
+              Package:  $(Pipeline.Workspace)/drop-fakerestapi/drop-fakerestapi-$(Build.BuildId).zip
+              enableCustomDeployment: true
+              DeploymentType: zipDeploy
+              TakeAppOfflineFlag: false
 
           - task: CmdLine@2
             displayName: 'Run JMeter tests'
