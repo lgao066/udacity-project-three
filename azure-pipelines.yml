@@ -24,7 +24,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build stage
+  displayName: Build infrastructure & run Postman tests
   jobs:
   - job: BuildJob
     pool:
@@ -96,7 +96,7 @@ stages:
       artifact: drop-fakerestapi
 
 - stage: DeployWebApp
-  displayName: 'Deploy Web App'
+  displayName: 'Deploy FakeRestApi & JMeter Tests'
   dependsOn: Build
   condition: succeeded()
   jobs:
@@ -147,6 +147,7 @@ stages:
                artifact: jmeter
 
 - stage: VirtualMachineDeploy
+  displayName: 'Deploy VM machine & run Selenium Tests'
   jobs:
   - deployment: VMDeploy
     pool:
